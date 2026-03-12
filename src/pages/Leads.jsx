@@ -10,6 +10,7 @@ import DataTable from '../components/DataTable';
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 
 export default function Leads() {
   const navigate = useNavigate();
@@ -155,22 +156,34 @@ export default function Leads() {
               key: 'actions',
               header: 'Actions',
               cell: (lead) => (
-                user?.role === 'ADMIN' ? (
-                  lead.status === 'ENROLLED' ? (
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <button 
+                    type="button" 
+                    className="btn btn-ghost-app" 
+                    onClick={() => navigate(`/leads/${lead._id}`, { state: { mode: 'view' } })}
+                    aria-label="View lead details"
+                    title="View"
+                  >
+                    <VisibilityOutlinedIcon fontSize="small" />
+                    View
+                  </button>
+                  {user?.role === 'ADMIN' ? (
+                    lead.status === 'ENROLLED' ? (
+                      <span style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>—</span>
+                    ) : (
+                      <button type="button" className="btn btn-danger-app" onClick={() => handleDelete(lead._id)} aria-label="Delete lead" title="Delete">
+                        <DeleteOutlineOutlinedIcon fontSize="small" />
+                      </button>
+                    )
+                  ) : lead.status === 'ENROLLED' ? (
                     <span style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>—</span>
                   ) : (
-                    <button type="button" className="btn btn-danger-app" onClick={() => handleDelete(lead._id)} aria-label="Delete lead" title="Delete">
-                      <DeleteOutlineOutlinedIcon fontSize="small" />
+                    <button type="button" className="btn btn-ghost-app" onClick={() => navigate(`/leads/${lead._id}`, { state: { mode: 'edit' } })}>
+                      <EditOutlinedIcon fontSize="small" />
+                      Edit
                     </button>
-                  )
-                ) : lead.status === 'ENROLLED' ? (
-                  <span style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>—</span>
-                ) : (
-                  <button type="button" className="btn btn-ghost-app" onClick={() => navigate(`/leads/${lead._id}`, { state: { mode: 'edit' } })}>
-                    <EditOutlinedIcon fontSize="small" />
-                    Edit
-                  </button>
-                )
+                  )}
+                </div>
               )
             }] : [])
           ]}

@@ -12,8 +12,9 @@ export default function LeadDetail() {
   const location = useLocation();
   const { user } = useAuth();
   const { toast } = useNotification();
-  const mode = location.state?.mode || 'edit'; // 'assign' | 'edit'
+  const mode = location.state?.mode || 'edit'; // 'assign' | 'edit' | 'view'
   const assignOnly = mode === 'assign';
+  const viewOnly = mode === 'view';
 
   const [lead, setLead] = useState(null);
   const [users, setUsers] = useState([]);
@@ -92,7 +93,9 @@ export default function LeadDetail() {
   return (
     <>
       <header className="page-header">
-        <h1 className="page-heading">{assignOnly ? 'Assign advisor' : 'Lead details'}</h1>
+        <h1 className="page-heading">
+          {assignOnly ? 'Assign advisor' : viewOnly ? 'Lead details' : 'Edit lead'}
+        </h1>
         <div className="page-actions">
           <button type="button" className="btn btn-ghost-app" onClick={() => navigate('/leads')}>
             Back to leads
@@ -124,7 +127,7 @@ export default function LeadDetail() {
         </dl>
       </div>
 
-      {canEdit ? (
+      {canEdit && !viewOnly ? (
         <div className="section-card">
           <h2 className="section-card-title">{assignOnly ? 'Assign advisor' : 'Update lead'}</h2>
           <form onSubmit={handleSave} className="login-form">
@@ -169,6 +172,12 @@ export default function LeadDetail() {
               </button>
             </div>
           </form>
+        </div>
+      ) : viewOnly ? (
+        <div className="section-card">
+          <p style={{ color: 'var(--text-muted)', margin: 0 }}>
+            This is a read-only view. To edit this lead, go back to the leads list and use the Edit action.
+          </p>
         </div>
       ) : isEnrolled ? (
         <div className="section-card">
