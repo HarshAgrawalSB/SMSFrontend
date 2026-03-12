@@ -20,7 +20,7 @@ function App() {
     <>
       <ToastContainer />
       <Routes>
-        <Route path="/login" element={isAuthenticated ? <Navigate to="/home" replace /> : <Login />} />
+        <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />} />
         <Route path="/lead" element={<LeadForm />} />
         <Route path="/home" element={<Landing />} />
 
